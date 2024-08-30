@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قراءة القرآن - Read the Quran</title>
+    <style>
+        /* General Body and Background Styling */
+        body {
+            font-family: 'Amiri', serif;
+            background-image: url('AL-QURAN-99.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        /* Header Styling */
+        h1 {
+            margin-top: 30px;
+            font-size: 2.5em;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        /* Button Styling */
+        .buttons {
+            margin: 20px;
+        }
+
+        .buttons button {
+            background-color: #82c0e9;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 200px;
+            margin-top: 20px;
+        }
+
+        .buttons button:hover {
+            background-color: #6ea6d2;
+            transform: translateY(-5px);
+        }
+
+        /* Iframe container styling */
+        .iframe-container {
+            margin-top: 20px;
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>قراءة القرآن<br>Read the Quran</h1>
+
+    <!-- Button to open the Mushaf -->
+    <div class="buttons">
+        <button onclick="toggleMushaf()">Open Mushaf</button>
+    </div>
+
+    <!-- Container for the iframe -->
+    <div class="iframe-container" id="mushafIframe" style="display: none;">
+        <iframe src="https://www.quranflash.com/en/quranflash.html" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        function toggleMushaf() {
+            var iframeContainer = document.getElementById('mushafIframe');
+            if (iframeContainer.style.display === "none") {
+                iframeContainer.style.display = "block";
+            } else {
+                iframeContainer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>

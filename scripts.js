@@ -14,15 +14,21 @@ function showPosition(position) {
 
     // Use a reverse geocoding API to get the city name from latitude and longitude
     fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
-            const city = data.address.city || data.address.town || data.address.village;
+            console.log('Reverse Geocoding Data:', data);  // Log the full response
+            const city = data.address.city || data.address.town || data.address.village || "Unknown Location";
             document.getElementById("city-name").textContent = `المدينة: ${city}`;
             updatePrayerTimes(latitude, longitude);
         })
         .catch(error => {
             document.getElementById("city-name").textContent = "City not found";
-            console.error("Error fetching city name:", error);
+            console.error("Error fetching city name:", error);  // More detailed logging
         });
 }
 
@@ -54,22 +60,38 @@ function updatePrayerTimes(latitude, longitude) {
     const ishaElement = document.getElementById('isha-time');
     const sunriseElement = document.getElementById('sunrise-time');
     const sunsetElement = document.getElementById('sunset-time');
-    const nextPrayerElement = document.getElementById('next-prayer');
 
     // Fetch prayer times from Aladhan API
     fetch(`https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=2`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             const timings = data.data.timings;
 
+            // Update the prayer times in the HTML
+            fajrElement.textContent = timings.Fajr;
+            dhuhrElement.textContent = timings.Dhuhr;
+            asrElement.textContent = timings.Asr;
+            maghribElement.textContent = timings.Maghrib;
+            ishaElement.textContent = timings.Isha;
+            sunriseElement.textContent = timings.Sunrise;
+            sunsetElement.textContent = timings.Sunset;
 
+            // Update the date in both Arabic and English
+            const optionsArabic = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', numberingSystem: 'arab' };
+            const optionsEnglish = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const gregorianDateArabic = new Date().toLocaleDateString('ar-EG', optionsArabic);
+            const gregorianDateEnglish = new Date().toLocaleDateString('en-US', optionsEnglish);
+            const hijriDate = data.data.date.hijri.date;
 
-
-
-
+            dateElement.textContent = `التاريخ الميلادي: ${gregorianDateArabic} | ${gregorianDateEnglish} | التاريخ الهجري: ${hijriDate}`;
         })
         .catch(error => {
-            console.error("Error fetching prayer times:", error);
+            console.error("Error fetching prayer times:", error);  // More detailed logging
         });
 }
 
